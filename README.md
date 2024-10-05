@@ -4,22 +4,22 @@ Posts App - A Spring Boot Application
 
 ## Auth Module:
 
-	•	Sign up and Sign in Endpoints: This module allows users to register new accounts and authenticate themselves securely using credentials.
+* Sign up and Sign in Endpoints: This module allows users to register new accounts and authenticate themselves securely using credentials.
 
 ## Posts Module:
 
-	•	Create, Update, and Delete Posts: Authenticated users can create, update, and delete their posts.
-	•	Fetch User Posts: Users can retrieve their posts, including both approved and unapproved ones.
-	•	Fetch Approved Posts: Authenticated and non-authenticated users can view all approved posts or retrieve an approved post by its ID.
+* Create, Update, and Delete Posts: Authenticated users can create, update, and delete their posts.
+* Fetch User Posts: Users can retrieve their posts, including both approved and unapproved ones.
+* Fetch Approved Posts: Authenticated and non-authenticated users can view all approved posts or retrieve an approved post by its ID.
 
 ## Admin Module:
 
-	•	Manage User Roles: Admins can assign roles to users, such as USER, ADMIN, or SUPER_ADMIN.
-	•	Activate User Accounts: Admins can activate users’ accounts.
-	•	Approve Posts: Admins have the authority to approve posts before they are publicly visible.
-	•	Fetch User Information: Retrieve detailed information for all users or specific users by their ID or email.
-	•	Fetch Posts: Admins can view all posts, whether approved or unapproved, and also retrieve posts for a specific user by ID.
-	•	Login Counter Information: Track login activities for any specific date, with details on successful and failed login attempts.
+* Manage User Roles: Admins can assign roles to users, such as USER, ADMIN, or SUPER_ADMIN.
+* Activate User Accounts: Admins can activate users’ accounts.
+* Approve Posts: Admins have the authority to approve posts before they are publicly visible.
+* Fetch User Information: Retrieve detailed information for all users or specific users by their ID or email.
+* Fetch Posts: Admins can view all posts, whether approved or unapproved, and also retrieve posts for a specific user by ID.
+* Login Counter Information: Track login activities for any specific date, with details on successful and failed login attempts.
 
 ## Login Counter Aspect:
 
