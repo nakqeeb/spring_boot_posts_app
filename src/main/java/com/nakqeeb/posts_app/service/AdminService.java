@@ -1,9 +1,6 @@
 package com.nakqeeb.posts_app.service;
 
-import com.nakqeeb.posts_app.dao.LoginCounterRepository;
-import com.nakqeeb.posts_app.dao.PostRepository;
-import com.nakqeeb.posts_app.dao.RoleRepository;
-import com.nakqeeb.posts_app.dao.UserRepository;
+import com.nakqeeb.posts_app.dao.*;
 import com.nakqeeb.posts_app.dto.ActivateUserDto;
 import com.nakqeeb.posts_app.dto.ApprovePostDto;
 import com.nakqeeb.posts_app.dto.UpdateRoleDto;
@@ -16,7 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,12 +29,15 @@ public class AdminService {
 
     private final LoginCounterRepository loginCounterRepository;
 
+    private final CommentRepository commentRepository;
+
     @Autowired
-    public AdminService(UserRepository userRepository, PostRepository postRepository, RoleRepository roleRepository, LoginCounterRepository loginCounterRepository) {
+    public AdminService(UserRepository userRepository, PostRepository postRepository, RoleRepository roleRepository, LoginCounterRepository loginCounterRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.roleRepository = roleRepository;
         this.loginCounterRepository = loginCounterRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<Post> findAllPosts() {
@@ -73,7 +75,7 @@ public class AdminService {
     public void activateUser(Long id, ActivateUserDto activateUserDto) {
         Optional<User> user = userRepository.findById(id);
 
-        if (user.isEmpty()) {
+        if (user.isEmpty() || Objects.equals(user.get().getEmail(), "super.admin@email.com")) {
             throw new UsernameNotFoundException("User not found");
         }
         user.get().setActivated(activateUserDto.isActivated());
@@ -95,7 +97,7 @@ public class AdminService {
     public void updateUserRole(Long id, UpdateRoleDto updateRoleDto) {
         Optional<User> user = userRepository.findById(id);
 
-        if (user.isEmpty()) {
+        if (user.isEmpty() || Objects.equals(user.get().getEmail(), "super.admin@email.com")) {
             throw new UsernameNotFoundException("User not found");
         }
 
@@ -117,5 +119,15 @@ public class AdminService {
             throw new Exception("No logging information found");
         }
         return loginCounter.get();
+    }
+
+    public void deleteComment(Long commentId) throws Exception {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+
+        if (comment.isEmpty()) {
+            throw new Exception("Comment with id " + commentId + " does not exist");
+        }
+
+        commentRepository.deleteById(commentId);
     }
 }

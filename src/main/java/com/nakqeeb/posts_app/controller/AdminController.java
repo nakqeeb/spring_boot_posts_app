@@ -8,6 +8,7 @@ import com.nakqeeb.posts_app.entity.Post;
 import com.nakqeeb.posts_app.entity.RoleEnum;
 import com.nakqeeb.posts_app.entity.User;
 import com.nakqeeb.posts_app.exception.ErrorMapper;
+import com.nakqeeb.posts_app.exception.PostNotFoundException;
 import com.nakqeeb.posts_app.response.EmbeddedPosts;
 import com.nakqeeb.posts_app.response.PostsPageResponse;
 import com.nakqeeb.posts_app.service.AdminService;
@@ -229,6 +230,25 @@ public class AdminController {
             return new ResponseEntity<>(loginCounter, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Operation(
+            description = "Delete comment by commentId by (Admin and SUPER_ADMIN)",
+            summary = "This is a summary for deleteComment endpoint"
+    )
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable String commentId) throws PostNotFoundException {
+        try {
+            adminService.deleteComment(Long.parseLong(commentId));
+            // Prepare a response message with status
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Comment deleted successfully");
+            response.put("status", HttpStatus.OK.value());
+            response.put("id", commentId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -11,6 +11,7 @@ Posts App - A Spring Boot Application
 * Create, Update, and Delete Posts: Authenticated users can create, update, and delete their posts.
 * Fetch User Posts: Users can retrieve their posts, including both approved and unapproved ones.
 * Fetch Approved Posts: Authenticated and non-authenticated users can view all approved posts or retrieve an approved post by its ID.
+* Allow users to add comments to posts, fetch specific post's comments, and delete their own comments.
 
 ## Admin Module:
 
@@ -20,6 +21,7 @@ Posts App - A Spring Boot Application
 * Fetch User Information: Retrieve detailed information for all users or specific users by their ID or email.
 * Fetch Posts: Admins can view all posts, whether approved or unapproved, and also retrieve posts for a specific user by ID.
 * Login Counter Information: Track login activities for any specific date, with details on successful and failed login attempts.
+* Allow admin to delete any comments added by users.
 
 ## Login Counter Aspect:
 

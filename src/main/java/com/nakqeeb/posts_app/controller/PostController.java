@@ -1,7 +1,9 @@
 package com.nakqeeb.posts_app.controller;
 
+import com.nakqeeb.posts_app.dto.AddCommentDto;
 import com.nakqeeb.posts_app.dto.CreatePostDto;
 import com.nakqeeb.posts_app.dto.UpdatePostDto;
+import com.nakqeeb.posts_app.entity.Comment;
 import com.nakqeeb.posts_app.entity.Post;
 import com.nakqeeb.posts_app.exception.ErrorMapper;
 import com.nakqeeb.posts_app.exception.PostNotFoundException;
@@ -209,6 +211,65 @@ public class PostController {
             response.put("message", "Post deleted successfully");
             response.put("status", HttpStatus.OK.value());
             response.put("id", id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(
+            description = "Add comment to a specific post by (USER, Admin and SUPER_ADMIN)",
+            summary = "This is a summary for addComment endpoint"
+    )
+    @PostMapping("/{postId}/comments")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<?> addComment(
+            @RequestBody @Valid AddCommentDto addCommentDto,
+            @PathVariable String postId,
+            HttpServletRequest request) {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt = authHeader.substring(7);
+        try {
+            String userEmail = jwtService.extractUsername(jwt);
+            Comment comment = postService.addComment(addCommentDto, userEmail, Long.parseLong(postId));
+            return new ResponseEntity<>(comment, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(
+            description = "Fetch comments for a specific post by (USER, Admin and SUPER_ADMIN)",
+            summary = "This is a summary for fetchComments endpoint"
+    )
+    @GetMapping("/{postId}/comments")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<?> fetchComments(@PathVariable String postId) {
+        try {
+            return new ResponseEntity<>(postService.getComments(Long.parseLong(postId)), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(
+            description = "Delete comment by its own user by commentId by (USER, Admin and SUPER_ADMIN)",
+            summary = "This is a summary for deleteComment endpoint"
+    )
+    @DeleteMapping("/comments/{commentId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<?> deleteComment(@PathVariable String commentId, HttpServletRequest request) throws PostNotFoundException {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt = authHeader.substring(7);
+        try {
+            String userEmail = jwtService.extractUsername(jwt);
+
+            postService.deleteComment(userEmail, Long.parseLong(commentId));
+            // Prepare a response message with status
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Comment deleted successfully");
+            response.put("status", HttpStatus.OK.value());
+            response.put("id", commentId);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.BAD_REQUEST);
