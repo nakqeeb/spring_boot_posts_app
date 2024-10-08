@@ -15,7 +15,7 @@ import java.util.Optional;
 @Aspect
 @Component
 public class LoggingInCounterAspect {
-    private static final Logger logger = LoggerFactory.getLogger(LoggingInCounterAspect.class);
+    // private static final Logger logger = LoggerFactory.getLogger(LoggingInCounterAspect.class);
 
     private  final LoginCounterRepository loginCounterRepository;
 

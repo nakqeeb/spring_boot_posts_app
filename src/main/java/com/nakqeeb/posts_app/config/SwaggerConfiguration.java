@@ -25,6 +25,8 @@ public class SwaggerConfiguration {
                                 "\t•\tAuth Module: User registration and login endpoints.\n" +
                                 "\t•\tPosts Module: Create, update, delete, and view posts. Authenticated and non-authenticated users can access approved posts.\n" +
                                 "\t•\tAdmin Module: Manage user roles, activate accounts, approve posts, fetch user/post information, and track login statistics.\n" +
+                                "\t•\tIt supports features like comments, post analytics, and a like system to enhance user engagement.\n" +
+                                "\t•\t The app ensures each user can like a post only once and tracks post views and likes to offer detailed insights.\n" +
                                 "\t•\tAdditionally, an Aspect is used to log login attempts and record successful and failed logins, offering detailed insights into authentication activities.")
                         .version("1.0").contact(new Contact().name("Nakqeeb").email("nakqeeb@gmail.com").url("https://nakqeeb.github.io/portfolio/"))
                         .license(new License().name("License of API")

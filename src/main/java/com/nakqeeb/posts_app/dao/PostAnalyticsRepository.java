@@ -1,12 +1,12 @@
 package com.nakqeeb.posts_app.dao;
 
-import com.nakqeeb.posts_app.entity.Comment;
+import com.nakqeeb.posts_app.entity.PostAnalytics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import java.util.List;
+import java.util.Optional;
 
 @RepositoryRestResource(exported = false)
-public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByPostId(Long postId);
+public interface PostAnalyticsRepository extends JpaRepository<PostAnalytics, Long> {
+    Optional<PostAnalytics> findByPostId(Long postId);
 }

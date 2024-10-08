@@ -12,7 +12,7 @@ public class UpdatePostDto {
     private String title;
 
     @NotNull(message = "Content is required")
-    @Size(min = 10, message = "Content must be at least 10 characters long")
+    @Size(min = 10, max = 1000, message = "Content must be at least 10 characters long")
     private String content;
 
 }

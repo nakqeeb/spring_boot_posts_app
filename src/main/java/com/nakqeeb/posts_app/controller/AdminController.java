@@ -115,11 +115,11 @@ public class AdminController {
     )
     @GetMapping("/users/{id}")
     public ResponseEntity<?> findUserById(@PathVariable String id) {
-        User user = adminService.findUserById(Long.parseLong(id));
         try {
+            User user = adminService.findUserById(Long.parseLong(id));
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(this.errorMapper.createErrorMap(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -129,11 +129,11 @@ public class AdminController {
     )
     @GetMapping("/users/email")
     public ResponseEntity<?> findUserByEmail(@RequestParam(name = "email") String email) {
-        User user = adminService.findUserByEmail(email);
         try {
+            User user = adminService.findUserByEmail(email);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(this.errorMapper.createErrorMap(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e), HttpStatus.NOT_FOUND);
         }
     }
 

@@ -10,6 +10,7 @@ import com.nakqeeb.posts_app.exception.PostNotFoundException;
 import com.nakqeeb.posts_app.response.EmbeddedPosts;
 import com.nakqeeb.posts_app.response.PostsPageResponse;
 import com.nakqeeb.posts_app.service.JwtService;
+import com.nakqeeb.posts_app.service.LikeService;
 import com.nakqeeb.posts_app.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
@@ -37,12 +38,14 @@ public class PostController {
     private final PostService postService;
     private final ErrorMapper errorMapper;
     private final JwtService jwtService;
+    private final LikeService likeService;
 
     @Autowired
-    public PostController(PostService postService, ErrorMapper errorMapper, JwtService jwtService) {
+    public PostController(PostService postService, ErrorMapper errorMapper, JwtService jwtService, LikeService likeService) {
         this.postService = postService;
         this.errorMapper = errorMapper;
         this.jwtService = jwtService;
+        this.likeService = likeService;
     }
 
     @Operation(
@@ -172,12 +175,12 @@ public class PostController {
     )
     @GetMapping("/approved/{id}")
     public ResponseEntity<?> findApprovedPost(@PathVariable String id) throws PostNotFoundException {
-        Post post = postService.findApprovedPost(Long.parseLong(id));
 
         try {
+            Post post = postService.findApprovedPost(Long.parseLong(id));
             return new ResponseEntity<>(post, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(this.errorMapper.createErrorMap(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -270,6 +273,29 @@ public class PostController {
             response.put("message", "Comment deleted successfully");
             response.put("status", HttpStatus.OK.value());
             response.put("id", commentId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(
+            description = "Add like to a post by (USER, Admin and SUPER_ADMIN)",
+            summary = "This is a summary for addLike endpoint"
+    )
+    @PostMapping("/{id}/like")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<?> addLike(@PathVariable String id, HttpServletRequest request) throws PostNotFoundException {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt = authHeader.substring(7);
+        try {
+            String userEmail = jwtService.extractUsername(jwt);
+            likeService.addLike(userEmail, Long.parseLong(id));
+            // Prepare a response message with status
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Like is added successfully");
+            response.put("status", HttpStatus.OK.value());
+            response.put("postId", id);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.BAD_REQUEST);
