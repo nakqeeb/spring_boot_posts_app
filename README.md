@@ -13,7 +13,8 @@ Posts App - A Spring Boot Application
 * Fetch Approved Posts: Authenticated and non-authenticated users can view all approved posts or retrieve an approved post by its ID.
 * Comments: Users can add comments to posts, fostering community interaction.
 * Post Analytics: Tracks post views and likes, allowing users to monitor post engagement. Each user can only like a post once.
-* Likes: Provides a like system where users can express their approval of posts. The system ensures that each user can like a post only once.
+* Likes: Provides a like system where users can express their approval of posts. The system ensures that each user can like a post only once, and they also have the option to remove their like (unlike) if desired.
+* Viewing Count: An aspect is used to implement and track the number of views per post.
 
 ## Admin Module:
 

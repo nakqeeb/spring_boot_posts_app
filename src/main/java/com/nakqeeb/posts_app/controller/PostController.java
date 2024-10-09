@@ -283,20 +283,14 @@ public class PostController {
             description = "Add like to a post by (USER, Admin and SUPER_ADMIN)",
             summary = "This is a summary for addLike endpoint"
     )
-    @PostMapping("/{id}/like")
+    @PostMapping("/{id}/like_unlike")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> addLike(@PathVariable String id, HttpServletRequest request) throws PostNotFoundException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt = authHeader.substring(7);
         try {
             String userEmail = jwtService.extractUsername(jwt);
-            likeService.addLike(userEmail, Long.parseLong(id));
-            // Prepare a response message with status
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Like is added successfully");
-            response.put("status", HttpStatus.OK.value());
-            response.put("postId", id);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(likeService.likeOrUnlike(userEmail, Long.parseLong(id)), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(this.errorMapper.createErrorMap(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

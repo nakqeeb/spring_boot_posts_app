@@ -12,4 +12,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     // Count the number of likes for a post
     int countByPostId(Long postId);
+
+    void deleteByUserIdAndPostId(Long userId, Long postId);
 }
