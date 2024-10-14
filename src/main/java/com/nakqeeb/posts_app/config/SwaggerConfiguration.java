@@ -27,7 +27,7 @@ public class SwaggerConfiguration {
                                 "\t•\tAdmin Module: Manage user roles, activate accounts, approve posts, fetch user/post information, and track login statistics.\n" +
                                 "\t•\tIt supports features like comments, post analytics, and a like system to enhance user engagement.\n" +
                                 "\t•\tThe app ensures each user can like a post only once, they also have the option to remove their like (unlike) if desired and tracks post views and likes to offer detailed insights.\n" +
-                                "\t \tViewing Count: An aspect is used to implement and track the number of views per post.\n" +
+                                "\t•\tViewing Count: An aspect is used to implement and track the number of views per post.\n" +
                                 "\t•\tLogin Counter: An Aspect is used to log login attempts and record successful and failed logins, offering detailed insights into authentication activities.")
                         .version("1.0").contact(new Contact().name("Nakqeeb").email("nakqeeb@gmail.com").url("https://nakqeeb.github.io/portfolio/"))
                         .license(new License().name("License of API")
